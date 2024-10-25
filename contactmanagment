@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_CONTACTOS 100
+#define NOMBRE_MAX 50
+#define TELEFONO_MAX 15
+
+typedef struct {
+    char nombre[NOMBRE_MAX];
+    char telefono[TELEFONO_MAX];
+} Contacto;
+
+Contacto contactos[MAX_CONTACTOS];
+int total_contactos = 0;
+
+void agregarContacto();
+void listarContactos();
+void modificarContacto();
+void eliminarContacto();
+void ordenarContactos();
+
+int main() {
+    int opcion;
+    
+    do {
+        printf("\n--- Gestor de Contactos ---\n");
+        printf("1. Agregar contacto\n");
+        printf("2. Listar contactos\n");
+        printf("3. Modificar contacto\n");
+        printf("4. Eliminar contacto\n");
+        printf("5. Ordenar contactos\n");
+        printf("0. Salir\n");
+        printf("Selecciona una opción: ");
+        scanf("%d", &opcion);
+        getchar(); 
+
+        switch(opcion) {
+            case 1: agregarContacto(); break;
+            case 2: listarContactos(); break;
+            case 3: modificarContacto(); break;
+            case 4: eliminarContacto(); break;
+            case 5: ordenarContactos(); break;
+            case 0: printf("Saliendo...\n"); break;
+            default: printf("Opcion no valida.\n");
+        }
+    } while(opcion != 0);
+
+    return 0;
+}
+
+// Funcion para agregar contacto
+void agregarContacto() {
+    if (total_contactos < MAX_CONTACTOS) {
+        printf("\n--- Agregar Contacto ---\n");
+        printf("Nombre: ");
+        fgets(contactos[total_contactos].nombre, NOMBRE_MAX, stdin);
+        contactos[total_contactos].nombre[strcspn(contactos[total_contactos].nombre, "\n")] = 0;
+        printf("Teléfono: ");
+        fgets(contactos[total_contactos].telefono, TELEFONO_MAX, stdin);
+        contactos[total_contactos].telefono[strcspn(contactos[total_contactos].telefono, "\n")] = 0; 
+        total_contactos++;
+        printf("Contacto agregado exitosamente.\n");
+    } else {
+        printf("No se pueden agregar mas contactos.\n");
+    }
+}
+
+// Funcion para listar contactos
+void listarContactos() {
+    printf("\n--- Listar Contactos ---\n");
+    if (total_contactos == 0) {
+        printf("No hay contactos para mostrar.\n");
+    } else {
+        for (int i = 0; i < total_contactos; i++) {
+            printf("%d. %s - %s\n", i + 1, contactos[i].nombre, contactos[i].telefono);
+        }
+    }
+}
+
+// Funcion para modificar contacto
+void modificarContacto() {
+    int indice;
+    listarContactos();
+    if (total_contactos > 0) {
+        printf("\nIntroduzca el numero del contacto a modificar: ");
+        scanf("%d", &indice);
+        getchar(); 
+
+        if (indice > 0 && indice <= total_contactos) {
+            indice--;
+            printf("Modificar contacto %s\n", contactos[indice].nombre);
+            printf("Nuevo nombre: ");
+            fgets(contactos[indice].nombre, NOMBRE_MAX, stdin);
+            contactos[indice].nombre[strcspn(contactos[indice].nombre, "\n")] = 0; 
+            printf("Nuevo telefono: ");
+            fgets(contactos[indice].telefono, TELEFONO_MAX, stdin);
+            contactos[indice].telefono[strcspn(contactos[indice].telefono, "\n")] = 0; 
+            printf("Contacto modificado exitosamente.\n");
+        } else {
+            printf("Indice no valido.\n");
+        }
+    }
+}
+
+// Funcion para eliminar contacto
+void eliminarContacto() {
+    int indice;
+    listarContactos();
+    if (total_contactos > 0) {
+        printf("\nIntroduce el número del contacto a eliminar: ");
+        scanf("%d", &indice);
+        getchar();
+
+        if (indice > 0 && indice <= total_contactos) {
+            indice--;
+            for (int i = indice; i < total_contactos - 1; i++) {
+                contactos[i] = contactos[i + 1]; 
+            }
+            total_contactos--;
+            printf("Contacto eliminado exitosamente.\n");
+        } else {
+            printf("Índice inválido.\n");
+        }
+    }
+}
+
+// Ordena contactos por nombre
+void ordenarContactos() {
+    if (total_contactos > 1) {
+        Contacto temp;
+        for (int i = 0; i < total_contactos - 1; i++) {
+            for (int j = i + 1; j < total_contactos; j++) {
+                if (strcmp(contactos[i].nombre, contactos[j].nombre) > 0) {
+                    temp = contactos[i];
+                    contactos[i] = contactos[j];
+                    contactos[j] = temp;
+                }
+            }
+        }
+        printf("Contactos ordenados alfabeticamente.\n");
+    } else {
+        printf("No hay demasiados contactos para ordenar.\n");
+    }
+}
