@@ -9,7 +9,7 @@ typedef struct { //crea estructura
 } Contacto; //nombre de la estructura
 
 //VARIABLE GLOBALES
-Contacto contactos[100]; //almacena 100 contactos
+Contacto contactos[100];//contactos es una coleccion de estructuras contacto
 int total_contactos = 0; //entero con valor inicial 0
 
 //DECLARO
@@ -26,8 +26,8 @@ void limpiarPantalla() {
     printf("\033[2J\033[1;1H"); //limpia pantalla (solo ANSI)
 }
 
-void imprimirLinea(char c, int longitud) {
-    for (int i = 0; i < longitud; i++) { //dibuja linea de caracteres c por longitud 
+void imprimirLinea(char c, int longitud) {//imprime una línea de caracteres c de longitud longitud.
+    for (int i = 0; i < longitud; i++) { //dibuja linea de caracteres c por longitud //Bucle que se ejecuta longitud veces
         putchar(c); //imprime un caracter
     }
     putchar('\n'); 
@@ -78,20 +78,20 @@ int main() {
 
 //CRUD (create, read, update, delete)
 void agregarContacto() { 
-    if (total_contactos >= 100) {
+    if (total_contactos >= 100) { //Verifica si el límite de contactos (100) ha sido alcanzado.
         printf("No se pueden agregar más contactos.\n");
         return;
     } //si total_contactos es mayor o igual a 100, no se puede agregar mas contactos
 
     printf("\nNombre y Apellido: ");
-    fgets(contactos[total_contactos].nombre, 50, stdin); //fgets lee linea de texto y almacena en el arreglo de caracteres
+    fgets(contactos[total_contactos].nombre, 50, stdin); //fgets lee la cadena y almacena en el arreglo de caracteres
     printf("Telefono: ");//printf imprime en pantalla
     fgets(contactos[total_contactos].telefono, 15, stdin); //fgets lee linea de texto y lo guarda en .telefono
     printf("Email: ");
     fgets(contactos[total_contactos].email, 50, stdin); //fgets asegura que no se lean mas caracteres de los que el tamaño del array permite
 
     contactos[total_contactos].nombre[strcspn(contactos[total_contactos].nombre, "\n")] = 0; //strcspn es un string que devuelve la longitud de la cadena de caracteres
-    contactos[total_contactos].telefono[strcspn(contactos[total_contactos].telefono, "\n")] = 0;
+    contactos[total_contactos].telefono[strcspn(contactos[total_contactos].telefono, "\n")] = 0;//strcspn cuenta caracteres hasta encontrar alguno de una lista dada en otra cadena.
     contactos[total_contactos].email[strcspn(contactos[total_contactos].email, "\n")] = 0;
 
     total_contactos++; //incrementa el total de contactos
